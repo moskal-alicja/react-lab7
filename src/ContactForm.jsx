@@ -16,6 +16,8 @@ class ContactForm extends React.Component {
         this.ageChanged = this.ageChanged.bind(this);
         this.dataChanged = this.dataChanged.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.validate = this.validate.bind(this);
+        this.modelNotValidated = this.modelNotValidated.bind(this);
     }
 
     ageChanged(event){
@@ -26,17 +28,16 @@ class ContactForm extends React.Component {
     dataChanged(event) {
         const name = event.target.name;
         const val = event.target.value;
-        this.setState({[name]: val});
+        this.setState({[name]: val}); 
+        this.validate(this.state.isAdult);   
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
-        if(this.state.isAdult) {
+    validate(isAdult) {
+        if(isAdult) {
             const email = this.state.email;
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g;
             if(!email.match(emailRegex)) {
                 this.setState({notValidEmail: true});
-                return;
             }
             else this.setState({notValidEmail: false});
         }
@@ -45,12 +46,24 @@ class ContactForm extends React.Component {
             const numberRegex = /^[0-9]{9}$/g;
             if(!phoneNumber.match(numberRegex)){
                 this.setState({notValidPhoneNumber: true});
-                return;
             }
             else this.setState({notValidPhoneNumber: false});          
         }
-        
-        
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();        
+    }
+
+    modelNotValidated() {
+        if(this.state.isAdult){
+            if(this.state.name==="") return true;
+            if(this.state.notValidEmail) return true;
+        }
+        else {
+            if(this.state.parentName==="") return true;
+            if(this.state.notValidPhoneNumber) return true;
+        }
     }
 
 
@@ -86,7 +99,7 @@ class ContactForm extends React.Component {
                     </label>
                 </div> 
                 }
-                <input type="submit" value="Submit"/>
+                <input type="submit" value="Submit" disabled={this.modelNotValidated()} />
             </form>
         );
     }
