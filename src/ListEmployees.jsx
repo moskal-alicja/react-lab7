@@ -1,6 +1,7 @@
 import React from 'react'
 import Employee from './Emlpoyee';
 
+
 class ListEmployees extends React.Component {
     constructor(props) {
       super(props);
@@ -31,8 +32,8 @@ class ListEmployees extends React.Component {
                 <Employee key={hit.id} name={hit.name} age={hit.age} active={hit.isActive} />
             </li>);
         return(
-            <div>
-                <p>Employees:</p>
+            <div>            
+                <h3>Employees:</h3>
                 <ul>{listItems}</ul>
             </div>
         );
